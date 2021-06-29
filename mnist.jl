@@ -10,7 +10,7 @@ using ProgressMeter: @showprogress
 import MLDatasets
 import BSON
 
-function build_model(args; imgsize = (28, 28, 1), nclasses = 10)
+function LeNet5(; imgsize=(28, 28, 1), nclasses=10)
     out_conv_size = (imgsize[1]÷4 - 3, imgsize[2]÷4 - 3, 16)
 
     return Chain(
@@ -64,6 +64,10 @@ function eval_loss_accuracy(loader, model, device)
     return (loss = l/ntot |> round4, acc = acc/ntot*100 |> round4)
 end
 
+## utility functions
+num_params(model) = sum(length, Flux.params(model)) 
+round4(x) = round(x, digits=4)
+
 # arguments for the `train` function 
 Base.@kwdef mutable struct Args
     η = 3e-4             # learning rate
@@ -92,7 +96,7 @@ function train(; kws...)
     end
 
     ## DATA
-    train_loader, test_loader = get_data(args)
+    train_loader, test_loader = prepare_data(args)
     @info "Dataset MNIST: $(train_loader.nobs) train and $(test_loader.nobs) test examples"
 
     ## MODEL AND OPTIMIZER

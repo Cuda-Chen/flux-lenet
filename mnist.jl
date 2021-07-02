@@ -72,7 +72,7 @@ round4(x) = round(x, digits=4)
 Base.@kwdef mutable struct Args
     η = 3e-4             # learning rate
     λ = 1e-6                # L2 regularizer param, implemented as weight decay
-    batchsize = 128      # batch size
+    batchsize = 32      # batch size
     epochs = 10          # number of epochs
     seed = 42             # set seed > 0 for reproducibility
     use_cuda = false      # if true use cuda (if available)
@@ -105,7 +105,8 @@ function train(; kws...)
     
     ps = Flux.params(model)  
 
-    opt = ADAM(args.η) 
+    #opt = ADAM(args.η) 
+    opt = AdaBelief(args.η)
     if args.λ > 0 # add weight decay, equivalent to L2 regularization
         opt = Optimiser(WeightDecay(args.λ), opt)
     end

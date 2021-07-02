@@ -71,7 +71,7 @@ round4(x) = round(x, digits=4)
 # arguments for the `train` function 
 Base.@kwdef mutable struct Args
     η = 3e-4             # learning rate
-    λ = 0                # L2 regularizer param, implemented as weight decay
+    λ = 1e-6                # L2 regularizer param, implemented as weight decay
     batchsize = 128      # batch size
     epochs = 10          # number of epochs
     seed = 42             # set seed > 0 for reproducibility
